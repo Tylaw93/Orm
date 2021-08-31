@@ -107,8 +107,22 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id' (req, res) => {
+router.delete('/:id', async (req, res) => {
   // delete one product by its `id` value
+    try{
+      const productInfo = await Product.destroy({
+        where: {
+          id: req.params.id
+        }
+      });
+      if(!productInfo){
+        res.status(400).json({message: 'No product with that id can be found'});
+        return;
+      }
+      res.status(200).json(productInfo)
+    } catch (err){
+      res.status(500).json(err);
+    }
 });
 
 module.exports = router;
